@@ -1,4 +1,6 @@
 using DEMO_PRN231_SLOT_3.DataAccess;
+using DEMO_PRN231_SLOT_3.Lib;
+using DEMO_PRN231_SLOT_3.Middlewares;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,16 +14,19 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient();
 
-builder.Services.AddCors(); // Make sure you call this previous to AddMvc
 
 //context
 builder.Services.AddDbContext<ProductContext>(option =>
 option.UseSqlServer(builder.Configuration.GetConnectionString("ProductContext") ?? throw new InvalidOperationException("Connection string 'context' not found.")));
+
+//Utils
+builder.Services.AddScoped<Utils>();
+
 var app = builder.Build();
 
-app.UseCors(
-        options => options.WithOrigins("https://localhost:7154").AllowAnyMethod()
-    );
+
+
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -34,6 +39,9 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
+
 app.MapControllers();
+
+app.UseGlobalHandlingErrorMiddleware();
 
 app.Run();
