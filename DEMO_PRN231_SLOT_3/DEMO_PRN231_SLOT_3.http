@@ -1,6 +1,0 @@
-@DEMO_PRN231_SLOT_3_HostAddress = http://localhost:5196
-
-GET {{DEMO_PRN231_SLOT_3_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
